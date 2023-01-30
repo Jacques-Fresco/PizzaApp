@@ -1,14 +1,13 @@
-import { Simulate } from 'react-dom/test-utils';
 import './scss/app.scss';
 
 import Header from './components/Header';
-import Categories from './components/Categories';
-import Sort from './components/Sort';
-import PizzaBlock from './components/PizzaBlock';
+import Home from './pages/Home';
+import NotFound from './pages/NotFound';
+import Cart from './pages/Cart';
+import { Route, Routes } from 'react-router-dom';
 
-import pizzas from './assets/pizza.json';
-
-console.log(pizzas);
+// import pizzas from './assets/pizza.json';
+// console.log(pizzas);
 
 function App() {
   return (
@@ -17,16 +16,11 @@ function App() {
         <Header />
         <div className="content">
           <div className="container">
-            <div className="content__top">
-              <Categories />
-              <Sort />
-            </div>
-            <h2 className="content__title">Все пиццы</h2>
-            <div className="content__items">
-              {pizzas.map((obj) => (
-                <PizzaBlock key={obj.id} {...obj} />
-              ))}
-            </div>
+            <Routes>
+              <Route path="" element={<Home />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="/cart" element={<Cart />} />
+            </Routes>
           </div>
         </div>
       </div>
