@@ -1,3 +1,4 @@
+import { includes } from 'lodash';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSort } from '../redux/slices/filterSlice';
@@ -14,6 +15,7 @@ export const sortList = [
 function Sort() {
   const dispatch = useDispatch();
   const sort = useSelector((state) => state.filter.sort);
+  const sortRef = React.useRef();
 
   const [open, setOpen] = React.useState(false);
 
@@ -26,8 +28,27 @@ function Sort() {
     setOpen(false);
   };
 
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      const arrayPath = event.composedPath();
+      if (!arrayPath.includes(sortRef.current)) {
+        setOpen(false);
+      }
+    };
+
+    // когда будет клик на body, передавай эту функцию
+    // эта функция передаётся, вещается на обработчик события (и снова)
+    document.body.addEventListener('click', (event) => handleClickOutside(event));
+    // если перезайти на страницу, то создается снова (ещё один)
+
+    return () => {
+      // если компонент размонтируется
+      document.body.removeEventListener('click', (event) => handleClickOutside(event));
+    };
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"
